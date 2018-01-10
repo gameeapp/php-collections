@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Tests\Iterator;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
 use Gamee\Collections\Iterator\ObjectIterator;
 use Tester\Assert;
