@@ -14,11 +14,6 @@ class ObjectIterator implements \Iterator
 {
 
 	/**
-	 * @var int
-	 */
-	protected $position = 0;
-
-	/**
 	 * @var array|mixed[]
 	 */
 	protected $data;  
@@ -26,37 +21,37 @@ class ObjectIterator implements \Iterator
 
 	public function __construct(array $data)
 	{
-		$this->position = 0;
 		$this->data = $data;
 	}
 
 
 	public function rewind(): void
 	{
-		$this->position = 0;
+		reset($this->data);
 	}
 
 
 	public function key(): int
 	{
-		return $this->position;
+		return key($this->data);
 	}
 
 
 	public function next(): void
 	{
-		++$this->position;
+		next($this->data);
 	}
 
 
 	public function valid(): bool
 	{
-		return isset($this->data[$this->position]);
+
+		return key($this->data) !== null;
 	}
 
 
 	public function current()
 	{
-		return $this->data[$this->position];
+		return current($this->data);
 	}
 }
