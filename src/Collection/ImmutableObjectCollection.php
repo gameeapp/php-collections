@@ -20,9 +20,9 @@ abstract class ImmutableObjectCollection extends ObjectIterator
 	 */
 	public function addItem($item): self
 	{
-		$className = $this->getItemType();
+		$classItemName = $this->getItemType();
 
-		if (!$item instanceof $className) {
+		if (!$item instanceof $classItemName) {
 			throw new \InvalidArgumentException(get_class($this) . '::addItem() only accepts ' . $this->getItemType());
 		}
 
