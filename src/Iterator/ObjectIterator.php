@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Iterator;
 
-class ObjectIterator
+class ObjectIterator implements \Iterator
 {
 
 	/**
