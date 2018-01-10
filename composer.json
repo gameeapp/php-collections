@@ -1,0 +1,27 @@
+{
+    "name": "gamee/php-collections",
+    "description": "package of usefull collections for php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gamee",
+            "email": "helloo@gameeapp.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "require-dev": {
+        "nette/tester": "^2.0@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gamee\\Collections\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GameeTest\\": "tests/GameeTest"
+        }
+    }
+}
