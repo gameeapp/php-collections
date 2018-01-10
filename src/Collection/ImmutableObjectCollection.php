@@ -12,7 +12,7 @@ namespace Gamee\Collections\Collection;
 
 use Gamee\Collections\Iterator\ObjectIterator;
 
-class ImmutableObjectCollection extends ObjectIterator
+abstract class ImmutableObjectCollection extends ObjectIterator
 {
 
 	/**
@@ -20,7 +20,9 @@ class ImmutableObjectCollection extends ObjectIterator
 	 */
 	public function addItem($item): self
 	{
-		if (!$item instanceof $this->getItemType()) {
+		$classItemName = $this->getItemType();
+
+		if (!$item instanceof $classItemName) {
 			throw new \InvalidArgumentException(get_class($this) . '::addItem() only accepts ' . $this->getItemType());
 		}
 
