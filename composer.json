@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GameeTest\\": "tests/GameeTest"
+            "Gamee\\Collections\\Tests\\": "tests/GameeTest"
         }
     }
 }
