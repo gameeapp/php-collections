@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GameeTest\Utilities;
+namespace Gamee\Collections\Tests\Utilities;
 
 class ItemClass
 {

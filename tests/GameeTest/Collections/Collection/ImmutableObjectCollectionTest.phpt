@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace GameeTest\Collections\Collection;
+namespace Gamee\Collections\Tests\Collection;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
 use Gamee\Collections\Collection\ImmutableObjectCollection;
-use GameeTest\Utilities\ItemClass;
+use Gamee\Collections\Tests\Utilities\ItemClass;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -19,7 +19,8 @@ class ImmutableObjectCollectionTest extends TestCase
 
 	public function testBasicFunctionality()
 	{
-		$collection = $this->createTestCollection();
+		$item1 = new ItemClass(1);
+		$collection = $this->createTestCollection($item1);
 
 		Assert::same(1, $collection->current()->getValue());
 		$collection->next();
@@ -46,9 +47,9 @@ class ImmutableObjectCollectionTest extends TestCase
 	/**
 	 * @return ImmutableObjectCollection
 	 */
-	private function createTestCollection()
+	private function createTestCollection(ItemClass $item)
 	{
-		$inputArray = [$item1 = new ItemClass(1), new ItemClass(2), new ItemClass(3)];
+		$inputArray = [$item, new ItemClass(2), new ItemClass(3)];
 
 		$collection = new class($inputArray) extends ImmutableObjectCollection
 		{

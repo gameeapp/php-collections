@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GameeTest\Collections\Iterator;
+namespace Gamee\Collections\Tests\Iterator;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
