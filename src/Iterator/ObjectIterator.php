@@ -53,5 +53,4 @@ class ObjectIterator implements \Iterator
 	{
 		return current($this->data);
 	}
-
 }
