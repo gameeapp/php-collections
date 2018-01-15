@@ -12,7 +12,7 @@ namespace Gamee\Collections\Collection;
 
 use Gamee\Collections\Iterator\ObjectIterator;
 
-abstract class ImmutableObjectCollection extends ObjectIterator
+abstract class ImmutableObjectCollection extends ObjectIterator implements \Countable
 {
 
 	/**
@@ -31,4 +31,17 @@ abstract class ImmutableObjectCollection extends ObjectIterator
 
 
 	abstract protected function getItemType(): string;
+
+
+	public function count()
+	{
+		return count($this->data);
+	}
+
+
+	public function isEmpty(): bool
+	{
+		return empty($this->data);
+	}
+
 }
