@@ -26,7 +26,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator
 			throw new \InvalidArgumentException(get_class($this) . '::addItem() only accepts ' . $this->getItemType());
 		}
 
-		return new static($this->data + [$item]);
+		return new static(array_merge($this->data, [$item]));
 	}
 
 
