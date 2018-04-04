@@ -26,11 +26,8 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 			throw new \InvalidArgumentException(get_class($this) . '::addItem() only accepts ' . $this->getItemType());
 		}
 
-		return new static($this->data + [$item]);
+		return new static(array_merge($this->data, [$item]));
 	}
-
-
-	abstract protected function getItemType(): string;
 
 
 	public function count()
@@ -43,5 +40,8 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 	{
 		return empty($this->data);
 	}
+
+
+	abstract protected function getItemType(): string;
 
 }
