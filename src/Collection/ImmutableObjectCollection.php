@@ -36,6 +36,12 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 	}
 
 
+	public function isEmpty(): bool
+	{
+		return empty($this->data);
+	}
+
+
 	abstract protected function getItemType(): string;
 
 }

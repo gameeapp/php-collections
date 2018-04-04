@@ -16,7 +16,7 @@ class ObjectIterator implements \Iterator
 	/**
 	 * @var array|mixed[]
 	 */
-	protected $data;  
+	protected $data;
 
 
 	public function __construct(array $data)
@@ -45,7 +45,6 @@ class ObjectIterator implements \Iterator
 
 	public function valid(): bool
 	{
-
 		return key($this->data) !== null;
 	}
 
