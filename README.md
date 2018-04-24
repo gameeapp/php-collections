@@ -7,10 +7,10 @@ Useful PHP utilities (Collections, Iterators, etc)
 
 use Gamee\Collections\Iterator\ObjectIterator;
 
-class UserCredentialsDTOIterator extends ObjectIterator
+class UserCredentialsDataIterator extends ObjectIterator
 {
 
-	public function current(): UserCredentialsDTO
+	public function current(): UserCredentialsData
 	{
 		return parent::current();
 	}
