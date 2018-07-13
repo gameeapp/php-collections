@@ -30,7 +30,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 	}
 
 
-	public function count()
+	public function count(): int
 	{
 		return count($this->data);
 	}
