@@ -1,3 +1,9 @@
+[![Latest Stable Version](https://poser.pugx.org/gamee/php-collections/v/stable)](https://packagist.org/packages/gamee/php-collections)
+[![License](https://poser.pugx.org/gamee/php-collections/license)](https://packagist.org/packages/gamee/php-collections)
+[![Total Downloads](https://poser.pugx.org/gamee/php-collections/downloads)](https://packagist.org/packages/gamee/php-collections)
+[![Build Status](https://travis-ci.org/gameeapp/nette-rabbitmq.svg?branch=master)](https://travis-ci.org/gameeapp/nette-rabbitmq)
+
+
 # php-collections
 Useful PHP utilities (Collections, Iterators, etc)
 
