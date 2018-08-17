@@ -1,13 +1,13 @@
 language: php
 
 php:
-	- 7.1
-	- 7.2
+  - 7.1
+  - 7.2
 
 install:
-	- composer install -a --no-interaction --prefer-source
+  - composer install -a --no-interaction --prefer-source
 
 script:
-	- composer tests
-	- composer phpstan
-	- composer phpcs
+  - composer tests
+  - composer phpstan
+  - composer phpcs
