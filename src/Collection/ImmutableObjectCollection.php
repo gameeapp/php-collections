@@ -16,6 +16,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 {
 
 	/**
+	 * @param  mixed $item
 	 * @throws \InvalidArgumentException
 	 */
 	public function addItem($item): self
@@ -38,7 +39,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 
 	public function isEmpty(): bool
 	{
-		return empty($this->data);
+		return $this->data === [];
 	}
 
 

@@ -1,27 +1,37 @@
 {
-    "name": "gamee/php-collections",
-    "description": "package of usefull collections for php",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Gamee",
-            "email": "helloo@gameeapp.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {},
-    "require-dev": {
-        "nette/tester": "^2.0@dev"
-    },
-    "autoload": {
-        "psr-4": {
-            "Gamee\\Collections\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Gamee\\Collections\\Tests\\": "tests/"
-        }
-    }
+	"name": "gamee/php-collections",
+	"description": "package of usefull collections for php",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Gamee",
+			"email": "helloo@gameeapp.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {},
+	"require-dev": {
+		"nette/tester": "^2.0",
+		"phpstan/phpstan": "^0.10",
+		"phpstan/phpstan-strict-rules": "^0.10",
+		"gamee/php-code-checker-rules": "^1.0",
+		"slevomat/coding-standard": "^4.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Gamee\\Collections\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Gamee\\Collections\\Tests\\": "tests/"
+		}
+	},
+	"scripts": {
+		"tests": "php vendor/nette/tester/src/tester.php tests -C",
+		"phpstan": "vendor/bin/phpstan analyse src tests -c vendor/gamee/php-code-checker-rules/phpstan.neon --level 7",
+		"phpcs": "vendor/bin/phpcs --standard=vendor/gamee/php-code-checker-rules/ruleset.xml --extensions=php,phpt --tab-width=4 --ignore=temp -sp src tests",
+		"phpcsfix": "vendor/bin/phpcbf --standard=vendor/gamee/php-code-checker-rules/ruleset.xml --extensions=php,phpt --tab-width=4 --ignore=temp -sp src tests"
+	}
 }
