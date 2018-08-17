@@ -31,7 +31,10 @@ class ObjectIterator implements \Iterator
 	}
 
 
-	public function key(): int
+	/**
+	 * @return int|string|null
+	 */
+	public function key()
 	{
 		return key($this->data);
 	}
@@ -49,6 +52,9 @@ class ObjectIterator implements \Iterator
 	}
 
 
+	/**
+	 * @return mixed
+	 */
 	public function current()
 	{
 		return current($this->data);
