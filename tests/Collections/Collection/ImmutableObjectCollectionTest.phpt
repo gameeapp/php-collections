@@ -111,7 +111,7 @@ class ImmutableObjectCollectionTest extends TestCase
 	{
 		$inputArray = [$item, new ItemClass(2), new ItemClass(3)];
 
-		$collection = new class($inputArray) extends ImmutableObjectCollection
+		return new class($inputArray) extends ImmutableObjectCollection
 		{
 
 			public function getItemType(): string
@@ -119,8 +119,6 @@ class ImmutableObjectCollectionTest extends TestCase
 				return ItemClass::class;
 			}
 		};
-
-		return $collection;
 	}
 
 
@@ -129,7 +127,7 @@ class ImmutableObjectCollectionTest extends TestCase
 	 */
 	private function createEmptyTestCollection(): ImmutableObjectCollection
 	{
-		$collection = new class([]) extends ImmutableObjectCollection
+		return new class([]) extends ImmutableObjectCollection
 		{
 
 			public function getItemType(): string
@@ -137,8 +135,6 @@ class ImmutableObjectCollectionTest extends TestCase
 				return ItemClass::class;
 			}
 		};
-
-		return $collection;
 	}
 }
 

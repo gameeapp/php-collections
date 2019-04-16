@@ -23,7 +23,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 		
 		while (key($data) !== null) {
 			if (!current($data) instanceof $classItemName) {
-				throw new \InvalidArgumentException(\get_class($this) . ' only accepts ' . $this->getItemType());
+				throw new \InvalidArgumentException(self::class . ' only accepts ' . $this->getItemType());
 			}
 			
 			next($data);
@@ -44,7 +44,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 		$classItemName = $this->getItemType();
 		
 		if (!$item instanceof $classItemName) {
-			throw new \InvalidArgumentException(\get_class($this) . '::addItem() only accepts ' . $this->getItemType());
+			throw new \InvalidArgumentException(self::class . '::addItem() only accepts ' . $this->getItemType());
 		}
 
 		return new static(array_merge($this->data, [$item]));
