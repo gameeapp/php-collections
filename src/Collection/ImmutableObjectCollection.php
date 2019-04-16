@@ -14,17 +14,37 @@ use Gamee\Collections\Iterator\ObjectIterator;
 
 abstract class ImmutableObjectCollection extends ObjectIterator implements \Countable
 {
-
+	
+	public function __construct(array $data)
+	{
+		$classItemName = $this->getItemType();
+		
+		\reset($data);
+		
+		while (key($data) !== null) {
+			if (!current($data) instanceof $classItemName) {
+				throw new \InvalidArgumentException(\get_class($this) . ' only accepts ' . $this->getItemType());
+			}
+			
+			next($data);
+		}
+		
+		\reset($data);
+		
+		parent::__construct($data);
+	}
+	
 	/**
-	 * @param  mixed $item
+	 * @param mixed $item
+	 *
 	 * @throws \InvalidArgumentException
 	 */
 	public function addItem($item): self
 	{
 		$classItemName = $this->getItemType();
-
+		
 		if (!$item instanceof $classItemName) {
-			throw new \InvalidArgumentException(get_class($this) . '::addItem() only accepts ' . $this->getItemType());
+			throw new \InvalidArgumentException(\get_class($this) . '::addItem() only accepts ' . $this->getItemType());
 		}
 
 		return new static(array_merge($this->data, [$item]));
@@ -44,5 +64,4 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 
 
 	abstract protected function getItemType(): string;
-
 }
