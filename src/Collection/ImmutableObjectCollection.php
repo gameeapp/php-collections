@@ -18,19 +18,13 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 	public function __construct(array $data)
 	{
 		$classItemName = $this->getItemType();
-		
-		\reset($data);
-		
-		while (key($data) !== null) {
-			if (!current($data) instanceof $classItemName) {
+
+		foreach ($data as $item) {
+			if (!$item instanceof $classItemName) {
 				throw new \InvalidArgumentException(self::class . ' only accepts ' . $this->getItemType());
 			}
-			
-			next($data);
 		}
-		
-		\reset($data);
-		
+
 		parent::__construct($data);
 	}
 	
@@ -42,7 +36,7 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 	public function addItem($item): self
 	{
 		$classItemName = $this->getItemType();
-		
+
 		if (!$item instanceof $classItemName) {
 			throw new \InvalidArgumentException(self::class . '::addItem() only accepts ' . $this->getItemType());
 		}
