@@ -15,17 +15,17 @@ use Gamee\Collections\Iterator\ObjectIterator;
 abstract class ImmutableObjectCollection extends ObjectIterator implements \Countable
 {
 	
-	public function __construct(array $items)
+	public function __construct(array $data)
 	{
 		$classItemName = $this->getItemType();
 
-		foreach ($items as $item) {
+		foreach ($data as $item) {
 			if (!$item instanceof $classItemName) {
 				throw new \InvalidArgumentException(self::class . ' only accepts ' . $this->getItemType());
 			}
 		}
 
-		parent::__construct($items);
+		parent::__construct($data);
 	}
 	
 	/**
@@ -41,19 +41,19 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 			throw new \InvalidArgumentException(self::class . '::addItem() only accepts ' . $this->getItemType());
 		}
 
-		return new static(array_merge($this->items, [$item]));
+		return new static(array_merge($this->data, [$item]));
 	}
 
 
 	public function count(): int
 	{
-		return count($this->items);
+		return count($this->data);
 	}
 
 
 	public function isEmpty(): bool
 	{
-		return $this->items === [];
+		return $this->data === [];
 	}
 
 
