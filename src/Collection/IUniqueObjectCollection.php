@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Collection;
 
-interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
+interface IUniqueObjectCollection extends \Countable, \Iterator
 {
 
 	/**
@@ -42,9 +42,6 @@ interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
 	 * @throws DuplicateKeyException
 	 */
 	public function addItem($item);
-
-
-	public function getIterator(): \ArrayIterator;
 
 
 	/**

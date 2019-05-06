@@ -4,31 +4,29 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Collection;
 
-abstract class UniqueObjectCollection implements IUniqueObjectCollection
+use Gamee\Collections\Iterator\ObjectIterator;
+
+abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueObjectCollection
 {
 
 	/**
-	 * @var array
-	 */
-	private $items = [];
-
-
-	/**
 	 * Skips items with duplicate key
-	 * @param array $data
 	 */
-	public function __construct(array $data)
+	public function __construct(array $items)
 	{
 		$classItemName = $this->getItemType();
+		$uniqueItems = [];
 
-		foreach ($data as $item) {
+		foreach ($items as $item) {
 			$this->assertItemType($item, $classItemName);
 
 			$identifier = $this->getIdentifier($item);
 			if (!$this->exists($identifier)) {
-				$this->items[$identifier] = $item;
+				$uniqueItems[$identifier] = $item;
 			}
 		}
+
+		parent::__construct($uniqueItems);
 	}
 
 
@@ -43,7 +41,7 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 	{
 		$privateAccessor = \Closure::bind(
 			static function (ImmutableObjectCollection $immutableObjectCollection) {
-				return $immutableObjectCollection->data;
+				return $immutableObjectCollection->items;
 			},
 			null,
 			$immutableObjectCollection
@@ -128,12 +126,6 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 		if (!$item instanceof $type) {
 			throw new \InvalidArgumentException(static::class . ' only accepts ' . $type);
 		}
-	}
-
-
-	public function getIterator(): \ArrayIterator
-	{
-		return new \ArrayIterator($this->items);
 	}
 
 
