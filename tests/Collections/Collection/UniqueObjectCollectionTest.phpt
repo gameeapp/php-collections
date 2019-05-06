@@ -136,6 +136,47 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
+	public function testSlice(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(2),
+			new ItemClass(3),
+			new ItemClass(4),
+			new ItemClass(5),
+		];
+
+		$collection = $this->createTestCollection($items);
+
+		/** @var UniqueObjectCollection $sliced */
+		$sliced = $collection->slice(1, 2);
+
+		Assert::same(2, count($sliced));
+		Assert::true($sliced->exists(2));
+		Assert::true($sliced->exists(3));
+	}
+
+
+	public function testFilter(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(2),
+			new ItemClass(3),
+			new ItemClass(4),
+			new ItemClass(5),
+		];
+
+		$collection = $this->createTestCollection($items);
+
+		$filtered = $collection->filter(static function (ItemClass $item) {
+			return $item->getValue() > 2;
+		});
+
+		Assert::same(3, count($filtered));
+	}
+
+
 	public function testExists(): void
 	{
 		$id = 1;
@@ -171,6 +212,24 @@ class UniqueObjectCollectionTest extends TestCase
 
 			$collection->get(78);
 		}, ItemDoesNotExistException::class);
+	}
+
+
+	public function testFind(): void
+	{
+		$id = 666;
+		$item = new ItemClass($id);
+		$collection = $this->createTestCollection([$item]);
+
+		Assert::same($item, $collection->find($id));
+	}
+
+
+	public function testFindNotFound(): void
+	{
+		$collection = $this->createTestCollection([]);
+
+		Assert::same(null, $collection->find(666));
 	}
 
 
