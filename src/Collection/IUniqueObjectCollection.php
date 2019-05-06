@@ -7,18 +7,41 @@ namespace Gamee\Collections\Collection;
 interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
 {
 
+	/**
+	 * @param int      $offset
+	 * @param int|null $limit
+	 *
+	 * @return static
+	 */
+	public function slice(int $offset, ?int $limit = null);
+
+
+	/**
+	 * @param callable $callback
+	 * @param int $flag
+	 *
+	 * @return static
+	 */
+	public function filter(callable $callback, $flag = 0);
+
+
+	/**
+	 * @param ImmutableObjectCollection $immutableObjectCollection
+	 *
+	 * @return static
+	 */
 	public static function createFromImmutableObjectCollection(
 		ImmutableObjectCollection $immutableObjectCollection
-	): self;
+	);
 
 
 	/**
 	 * @param mixed $item
 	 *
-	 * @return IUniqueObjectCollection
+	 * @return static
 	 * @throws DuplicateKeyException
 	 */
-	public function addItem($item): self;
+	public function addItem($item);
 
 
 	public function getIterator(): \ArrayIterator;

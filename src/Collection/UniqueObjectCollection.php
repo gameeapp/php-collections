@@ -32,9 +32,14 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 	}
 
 
+	/**
+	 * @param ImmutableObjectCollection $immutableObjectCollection
+	 *
+	 * @return static
+	 */
 	public static function createFromImmutableObjectCollection(
 		ImmutableObjectCollection $immutableObjectCollection
-	): IUniqueObjectCollection
+	)
 	{
 		$privateAccessor = \Closure::bind(
 			static function (ImmutableObjectCollection $immutableObjectCollection) {
@@ -55,12 +60,49 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
+	 * @param int      $offset
+	 * @param int|null $limit
+	 *
+	 * @return static
+	 */
+	public function slice(int $offset, ?int $limit = null)
+	{
+		return new static(
+			array_slice(
+				$this->items,
+				$offset,
+				$limit,
+				true
+			)
+		);
+	}
+
+
+	/**
+	 * @param callable $callback
+	 * @param int $flag
+	 *
+	 * @return static
+	 */
+	public function filter(callable $callback, $flag = 0)
+	{
+		return new static(
+			array_filter(
+				$this->items,
+				$callback,
+				$flag
+			)
+		);
+	}
+
+
+	/**
 	 * @param mixed $item
 	 *
-	 * @return IUniqueObjectCollection
+	 * @return static
 	 * @throws DuplicateKeyException
 	 */
-	public function addItem($item): IUniqueObjectCollection
+	public function addItem($item)
 	{
 		$this->assertItemType($item, $this->getItemType());
 
@@ -116,6 +158,21 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 	{
 		if (!$this->exists($key)) {
 			throw new ItemDoesNotExistException($key);
+		}
+
+		return $this->items[$key];
+	}
+
+
+	/**
+	 * @param string|int $key
+	 *
+	 * @return mixed
+	 */
+	public function find($key)
+	{
+		if (!$this->exists($key)) {
+			return null;
 		}
 
 		return $this->items[$key];
