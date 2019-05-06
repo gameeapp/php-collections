@@ -16,7 +16,7 @@ class ObjectIterator implements \Iterator
 	/**
 	 * @var array|mixed[]
 	 */
-	protected $items;
+	protected $items = [];
 
 
 	public function __construct(array $items)

@@ -112,7 +112,7 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
-	public function testIteratorInIterator(): void
+	/*public function testIteratorInIterator(): void
 	{
 		$items = [];
 		$itemCount = 3;
@@ -133,7 +133,7 @@ class UniqueObjectCollectionTest extends TestCase
 		}
 
 		Assert::same($itemCount, $outerIterationItemCount);
-	}
+	}*/
 
 
 	public function testSlice(): void
