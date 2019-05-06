@@ -12,12 +12,12 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 	/**
 	 * Skips items with duplicate key
 	 */
-	public function __construct(array $items)
+	public function __construct(array $data)
 	{
 		$classItemName = $this->getItemType();
 		$uniqueItems = [];
 
-		foreach ($items as $item) {
+		foreach ($data as $item) {
 			$this->assertItemType($item, $classItemName);
 
 			$identifier = $this->getIdentifier($item);
@@ -41,7 +41,7 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 	{
 		$privateAccessor = \Closure::bind(
 			static function (ImmutableObjectCollection $immutableObjectCollection) {
-				return $immutableObjectCollection->items;
+				return $immutableObjectCollection->data;
 			},
 			null,
 			$immutableObjectCollection
@@ -53,7 +53,7 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 
 	protected function getItems(): array
 	{
-		return $this->items;
+		return $this->data;
 	}
 
 
@@ -67,7 +67,7 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 	{
 		return new static(
 			array_slice(
-				$this->items,
+				$this->data,
 				$offset,
 				$limit,
 				true
@@ -86,7 +86,7 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 	{
 		return new static(
 			array_filter(
-				$this->items,
+				$this->data,
 				$callback,
 				$flag
 			)
@@ -110,8 +110,8 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 		}
 
 		$collection = new static([]);
-		$collection->items = $this->items;
-		$collection->items[$identifier] = $item;
+		$collection->data = $this->data;
+		$collection->data[$identifier] = $item;
 
 		return $collection;
 	}
@@ -136,7 +136,7 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 	 */
 	public function exists($key): bool
 	{
-		return array_key_exists($key, $this->items);
+		return array_key_exists($key, $this->data);
 	}
 
 
@@ -152,7 +152,7 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 			throw new ItemDoesNotExistException($key);
 		}
 
-		return $this->items[$key];
+		return $this->data[$key];
 	}
 
 
@@ -167,19 +167,19 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 			return null;
 		}
 
-		return $this->items[$key];
+		return $this->data[$key];
 	}
 
 
 	public function count(): int
 	{
-		return count($this->items);
+		return count($this->data);
 	}
 
 
 	public function isEmpty(): bool
 	{
-		return $this->items === [];
+		return $this->data === [];
 	}
 
 
