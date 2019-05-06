@@ -16,18 +16,18 @@ class ObjectIterator implements \Iterator
 	/**
 	 * @var array|mixed[]
 	 */
-	protected $data;
+	protected $items = [];
 
 
-	public function __construct(array $data)
+	public function __construct(array $items)
 	{
-		$this->data = $data;
+		$this->items = $items;
 	}
 
 
 	public function rewind(): void
 	{
-		reset($this->data);
+		reset($this->items);
 	}
 
 
@@ -36,19 +36,19 @@ class ObjectIterator implements \Iterator
 	 */
 	public function key()
 	{
-		return key($this->data);
+		return key($this->items);
 	}
 
 
 	public function next(): void
 	{
-		next($this->data);
+		next($this->items);
 	}
 
 
 	public function valid(): bool
 	{
-		return key($this->data) !== null;
+		return key($this->items) !== null;
 	}
 
 
@@ -57,6 +57,6 @@ class ObjectIterator implements \Iterator
 	 */
 	public function current()
 	{
-		return current($this->data);
+		return current($this->items);
 	}
 }
