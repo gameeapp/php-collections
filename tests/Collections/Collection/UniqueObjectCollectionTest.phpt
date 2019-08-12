@@ -64,7 +64,7 @@ class UniqueObjectCollectionTest extends TestCase
 			$this->createTestCollection(
 				[
 					new ItemClass(1),
-					new AnotherClass(),
+					new AnotherClass(2),
 					new ItemClass(3),
 				]
 			);
@@ -93,6 +93,30 @@ class UniqueObjectCollectionTest extends TestCase
 		$mergedCollection = $collection1->mergeWith($collection2);
 
 		Assert::same(5, count($mergedCollection));
+	}
+
+
+	public function testExceptionMergeWithDifferentType(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(2),
+			new ItemClass(3),
+		];
+
+		$collection1 = $this->createTestCollection($items);
+
+		$anotherItems = [
+			new AnotherClass(3),
+			new AnotherClass(4),
+			new AnotherClass(5),
+		];
+
+		$collection2 = $this->createAnotherTestCollection($anotherItems);
+
+		Assert::exception(function () use ($collection1, $collection2): void {
+			$collection1->mergeWith($collection2);
+		}, \RuntimeException::class);
 	}
 
 
@@ -291,7 +315,7 @@ class UniqueObjectCollectionTest extends TestCase
 		$collection = $this->createTestCollection();
 
 		Assert::exception(function () use ($collection): void {
-			$collection->addItem(new AnotherClass());
+			$collection->addItem(new AnotherClass(3));
 		}, \InvalidArgumentException::class);
 	}
 
@@ -333,6 +357,44 @@ class UniqueObjectCollectionTest extends TestCase
 
 			/**
 			 * @param ItemClass $item
+			 *
+			 * @return bool
+			 */
+			public function contains($item): bool
+			{
+				return parent::contains($item);
+			}
+		};
+	}
+
+
+	/**
+	 * @return MockActualUniqueObjectCollection
+	 */
+	private function createAnotherTestCollection(array $inputArray): MockActualUniqueObjectCollection
+	{
+		return new class($inputArray) extends UniqueObjectCollection implements MockActualUniqueObjectCollection
+		{
+
+			public function getItemType(): string
+			{
+				return AnotherClass::class;
+			}
+
+
+			/**
+			 * @param AnotherClass $item
+			 *
+			 * @return int
+			 */
+			protected function getIdentifier($item): int
+			{
+				return $item->getValue();
+			}
+
+
+			/**
+			 * @param AnotherClass $item
 			 *
 			 * @return bool
 			 */

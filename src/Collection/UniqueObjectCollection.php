@@ -32,10 +32,15 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 
 	/**
 	 * @param IUniqueObjectCollection $collection
+	 * @throws \RuntimeException
 	 * @return static
 	 */
 	public function mergeWith(IUniqueObjectCollection $collection)
 	{
+		if ($this->getItemType() !== $collection->getItemType()) {
+			throw new \RuntimeException('Can not merge collections with different item type');
+		}
+
 		return new static(
 			array_replace($this->data, $collection->data)
 		);
