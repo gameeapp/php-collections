@@ -29,5 +29,4 @@ class ItemClass
 	{
 		$this->value = $value;
 	}
-
 }

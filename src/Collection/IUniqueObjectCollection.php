@@ -8,6 +8,14 @@ interface IUniqueObjectCollection extends \Countable, \Iterator
 {
 
 	/**
+	 * @param IUniqueObjectCollection $collection
+	 * @throws \RuntimeException
+	 * @return static
+	 */
+	public function mergeWith(IUniqueObjectCollection $collection);
+
+
+	/**
 	 * @param int      $offset
 	 * @param int|null $limit
 	 *
