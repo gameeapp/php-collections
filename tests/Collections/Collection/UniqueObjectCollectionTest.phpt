@@ -9,6 +9,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 use Gamee\Collections\Collection\ImmutableObjectCollection;
 use Gamee\Collections\Collection\ItemDoesNotExistException;
 use Gamee\Collections\Collection\UniqueObjectCollection;
+use Gamee\Collections\Tests\Collections\Collection\MockActualUniqueObjectCollection;
 use Gamee\Collections\Tests\Utilities\AnotherClass;
 use Gamee\Collections\Tests\Utilities\DummyUniqueItemCollection;
 use Gamee\Collections\Tests\Utilities\ItemClass;
@@ -71,6 +72,30 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
+	public function testMergeWith(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(2),
+			new ItemClass(3),
+		];
+
+		$collection1 = $this->createTestCollection($items);
+
+		$items = [
+			new ItemClass(3),
+			new ItemClass(4),
+			new ItemClass(5),
+		];
+
+		$collection2 = $this->createTestCollection($items);
+
+		$mergedCollection = $collection1->mergeWith($collection2);
+
+		Assert::same(5, count($mergedCollection));
+	}
+
+
 	public function testCreateFromImmutableObjectCollection(): void
 	{
 		$items = [
@@ -107,6 +132,8 @@ class UniqueObjectCollectionTest extends TestCase
 		$collection = $this->createTestCollection($items);
 
 		foreach ($collection as $key => $item) {
+			$a = $item->getValue();
+			Assert::type('int', $a);
 			Assert::same($items[$key], $item);
 		}
 	}
@@ -195,6 +222,18 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
+	public function testContains(): void
+	{
+		$itemInCollection = new ItemClass(1);
+		$itemNotInCollection = new ItemClass(2);
+
+		$collection = $this->createTestCollection([$itemInCollection]);
+
+		Assert::true($collection->contains($itemInCollection));
+		Assert::false($collection->contains($itemNotInCollection));
+	}
+
+
 	public function testGet(): void
 	{
 		$id = 666;
@@ -266,13 +305,13 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 	/**
-	 * @return UniqueObjectCollection
+	 * @return MockActualUniqueObjectCollection
 	 */
-	private function createTestCollection($inputArray = null): UniqueObjectCollection
+	private function createTestCollection($inputArray = null): MockActualUniqueObjectCollection
 	{
 		$inputArray = $inputArray ?? [new ItemClass(1), new ItemClass(2)];
 
-		return new class($inputArray) extends UniqueObjectCollection
+		return new class($inputArray) extends UniqueObjectCollection implements MockActualUniqueObjectCollection
 		{
 
 			public function getItemType(): string
@@ -289,6 +328,17 @@ class UniqueObjectCollectionTest extends TestCase
 			protected function getIdentifier($item): int
 			{
 				return $item->getValue();
+			}
+
+
+			/**
+			 * @param ItemClass $item
+			 *
+			 * @return bool
+			 */
+			public function contains($item): bool
+			{
+				return parent::contains($item);
 			}
 		};
 	}

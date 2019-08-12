@@ -31,6 +31,18 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 
 
 	/**
+	 * @param IUniqueObjectCollection $collection
+	 * @return static
+	 */
+	public function mergeWith(IUniqueObjectCollection $collection)
+	{
+		return new static(
+			array_replace($this->data, $collection->data)
+		);
+	}
+
+
+	/**
 	 * @param ImmutableObjectCollection $immutableObjectCollection
 	 *
 	 * @return static
@@ -137,6 +149,19 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 	public function exists($key): bool
 	{
 		return array_key_exists($key, $this->data);
+	}
+
+
+	/**
+	 * @param mixed $item
+	 *
+	 * @return bool
+	 */
+	protected function contains($item): bool
+	{
+		return $this->exists(
+			$this->getIdentifier($item)
+		);
 	}
 
 
