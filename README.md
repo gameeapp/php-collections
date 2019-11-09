@@ -22,3 +22,22 @@ class UserCredentialsDataIterator extends ObjectIterator
 	}
 }
 ```
+
+## ImmutableObjectCollection
+
+```php
+final class UserDataCollection extends ImmutableObjectCollection
+{
+
+	protected function getItemType(): string
+	{
+		return UserData::class;
+	}
+
+
+	public function current(): UserData
+	{
+		return parent::current();
+	}
+}
+```
