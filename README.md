@@ -26,6 +26,8 @@ class UserCredentialsDataIterator extends ObjectIterator
 ## ImmutableObjectCollection
 
 ```php
+use Gamee\Collections\Collection\ImmutableObjectCollection;
+
 final class UserDataCollection extends ImmutableObjectCollection
 {
 
