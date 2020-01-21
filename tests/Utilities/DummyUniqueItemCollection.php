@@ -9,12 +9,6 @@ use Gamee\Collections\Collection\UniqueObjectCollection;
 final class DummyUniqueItemCollection extends UniqueObjectCollection
 {
 
-	public function current(): ItemClass
-	{
-		return parent::current();
-	}
-
-
 	protected function getItemType(): string
 	{
 		return ItemClass::class;

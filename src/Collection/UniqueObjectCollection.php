@@ -6,8 +6,13 @@ namespace Gamee\Collections\Collection;
 
 use Gamee\Collections\Iterator\ObjectIterator;
 
-abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueObjectCollection
+abstract class UniqueObjectCollection implements IUniqueObjectCollection
 {
+
+	/**
+	 * @var array|mixed[]
+	 */
+	protected $data = [];
 
 	/**
 	 * Skips items with duplicate key
@@ -26,16 +31,22 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 			}
 		}
 
-		parent::__construct($uniqueItems);
+		$this->data = $uniqueItems;
+	}
+
+
+	public function getIterator(): ObjectIterator
+	{
+		return new ObjectIterator($this->data);
 	}
 
 
 	/**
-	 * @param IUniqueObjectCollection $collection
+	 * @param UniqueObjectCollection $collection
 	 * @throws \RuntimeException
 	 * @return static
 	 */
-	public function mergeWith(IUniqueObjectCollection $collection)
+	public function mergeWith(UniqueObjectCollection $collection)
 	{
 		if ($this->getItemType() !== $collection->getItemType()) {
 			throw new \RuntimeException('Can not merge collections with different item type');
@@ -108,6 +119,24 @@ abstract class UniqueObjectCollection extends ObjectIterator implements IUniqueO
 				$flag
 			)
 		);
+	}
+
+
+	public function map(callable $callback): array
+	{
+		return array_map(
+			$callback,
+			$this->data
+		);
+	}
+
+
+	/**
+	 * @return array|int[]|string[]
+	 */
+	public function getScalarIds(): array
+	{
+		return array_keys($this->data);
 	}
 
 

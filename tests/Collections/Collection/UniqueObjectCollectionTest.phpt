@@ -163,7 +163,7 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
-	/*public function testIteratorInIterator(): void
+	public function testIteratorInIterator(): void
 	{
 		$items = [];
 		$itemCount = 3;
@@ -184,7 +184,7 @@ class UniqueObjectCollectionTest extends TestCase
 		}
 
 		Assert::same($itemCount, $outerIterationItemCount);
-	}*/
+	}
 
 
 	public function testSlice(): void
@@ -225,6 +225,47 @@ class UniqueObjectCollectionTest extends TestCase
 		});
 
 		Assert::same(3, count($filtered));
+	}
+
+
+	public function testMap(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(5),
+			new ItemClass(30),
+		];
+
+		$collection = $this->createTestCollection($items);
+
+		$actual = $collection->map(
+			static function (ItemClass $itemClass) {
+				return $itemClass->getValue() + 1;
+			}
+		);
+
+		Assert::same(
+			[
+				1 => 2,
+				5 => 6,
+				30 => 31,
+			],
+			$actual
+		);
+	}
+
+
+	public function getScalarIds(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(5),
+			new ItemClass(30),
+		];
+
+		$collection = $this->createTestCollection($items);
+
+		Assert::same([1, 5, 30], $collection->getScalarIds());
 	}
 
 
