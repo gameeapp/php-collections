@@ -9,5 +9,8 @@ use Gamee\Collections\Collection\IUniqueObjectCollection;
 interface MockActualUniqueObjectCollection extends IUniqueObjectCollection
 {
 
+	/**
+	 * @param mixed $item
+	 */
 	public function contains($item): bool;
 }

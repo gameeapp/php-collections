@@ -17,7 +17,7 @@ use Tester\TestCase;
  */
 class ImmutableObjectCollectionTest extends TestCase
 {
-	
+
 	public function testEmptyCollection(): void
 	{
 		Assert::noError(function () {
@@ -31,7 +31,7 @@ class ImmutableObjectCollectionTest extends TestCase
 		}
 		);
 	}
-	
+
 	public function testBasicFunctionality(): void
 	{
 		$item1 = new ItemClass(1);
@@ -56,19 +56,19 @@ class ImmutableObjectCollectionTest extends TestCase
 		$collection->addItem(new \stdClass());
 		}, \InvalidArgumentException::class);
 	}
-	
-	
+
+
 	public function testConstructorEntryThrowExceptionOnWrongType(): void
 	{
 		Assert::exception(
 			function (): void {
 				new class ([
 					new ItemClass(5),
-					new AnotherClass(),
-					new AnotherClass(),
+					new AnotherClass(2),
+					new AnotherClass(3),
 				]) extends ImmutableObjectCollection
 				{
-					
+
 					protected function getItemType(): string
 					{
 						return ItemClass::class;
@@ -78,8 +78,8 @@ class ImmutableObjectCollectionTest extends TestCase
 			\InvalidArgumentException::class
 		);
 	}
-	
-	
+
+
 	public function testConstructorValid(): void
 	{
 		Assert::noError(
@@ -91,7 +91,7 @@ class ImmutableObjectCollectionTest extends TestCase
 					new ItemClass(4),
 				]) extends ImmutableObjectCollection
 				{
-					
+
 					protected function getItemType(): string
 					{
 						return ItemClass::class;
@@ -100,10 +100,10 @@ class ImmutableObjectCollectionTest extends TestCase
 			}
 		);
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * @return ImmutableObjectCollection
 	 */

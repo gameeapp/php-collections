@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Collection;
 
-interface IUniqueObjectCollection extends \Countable, \Iterator
+interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
 {
 
 	/**
-	 * @param IUniqueObjectCollection $collection
+	 * @param UniqueObjectCollection $collection
 	 * @throws \RuntimeException
 	 * @return static
 	 */
-	public function mergeWith(IUniqueObjectCollection $collection);
+	public function mergeWith(UniqueObjectCollection $collection);
 
 
 	/**
@@ -31,6 +31,15 @@ interface IUniqueObjectCollection extends \Countable, \Iterator
 	 * @return static
 	 */
 	public function filter(callable $callback, $flag = 0);
+
+
+	public function map(callable $callback): array;
+
+
+	/**
+	 * @return array|int[]|string[]
+	 */
+	public function getScalarIds(): array;
 
 
 	/**
