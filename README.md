@@ -5,6 +5,7 @@
 
 
 # php-collections
+
 Useful PHP utilities (Collections, Iterators, etc)
 
 ## UniqueObjectCollection usage
@@ -12,6 +13,9 @@ Useful PHP utilities (Collections, Iterators, etc)
 ```php
 use Gamee\Collections\Collection\UniqueObjectCollection;
 
+/**
+ * @extends UniqueObjectCollection<UserData>
+ */
 final class UserDataCollection extends UniqueObjectCollection
 {
 
@@ -23,9 +27,9 @@ final class UserDataCollection extends UniqueObjectCollection
 
 	/**
 	 * @param UserData $item
-	 * @return int
+	 * @return string|int
 	 */
-	protected function getIdentifier($item): int
+	protected function getIdentifier(object $item)
 	{
 		return $item->getId();
 	}
