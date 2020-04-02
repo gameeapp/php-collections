@@ -7,10 +7,7 @@ namespace Gamee\Collections\Tests\Utilities;
 class AnotherClass
 {
 
-	/**
-	 * @var int
-	 */
-	private $value;
+	private int $value;
 
 
 	public function __construct(int $value)

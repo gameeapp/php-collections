@@ -20,7 +20,7 @@ class ImmutableObjectCollectionTest extends TestCase
 
 	public function testEmptyCollection(): void
 	{
-		Assert::noError(function () {
+		Assert::noError(function (): void {
 			new class ([]) extends ImmutableObjectCollection
 			{
 				protected function getItemType(): string
@@ -83,7 +83,7 @@ class ImmutableObjectCollectionTest extends TestCase
 	public function testConstructorValid(): void
 	{
 		Assert::noError(
-			function () {
+			function (): void {
 				new class ([
 					new ItemClass(1),
 					new ItemClass(2),
@@ -104,9 +104,6 @@ class ImmutableObjectCollectionTest extends TestCase
 
 
 
-	/**
-	 * @return ImmutableObjectCollection
-	 */
 	private function createTestCollection(ItemClass $item): ImmutableObjectCollection
 	{
 		$inputArray = [$item, new ItemClass(2), new ItemClass(3)];
@@ -122,9 +119,6 @@ class ImmutableObjectCollectionTest extends TestCase
 	}
 
 
-	/**
-	 * @return ImmutableObjectCollection
-	 */
 	private function createEmptyTestCollection(): ImmutableObjectCollection
 	{
 		return new class([]) extends ImmutableObjectCollection

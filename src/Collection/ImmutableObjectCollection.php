@@ -15,7 +15,10 @@ use Gamee\Collections\Iterator\ObjectIterator;
 abstract class ImmutableObjectCollection extends ObjectIterator implements \Countable
 {
 	
-	public function __construct(array $data)
+	abstract protected function getItemType(): string;
+
+
+	final public function __construct(array $data)
 	{
 		$classItemName = $this->getItemType();
 
@@ -55,7 +58,4 @@ abstract class ImmutableObjectCollection extends ObjectIterator implements \Coun
 	{
 		return $this->data === [];
 	}
-
-
-	abstract protected function getItemType(): string;
 }

@@ -6,18 +6,31 @@ namespace Gamee\Collections\Collection;
 
 use Gamee\Collections\Iterator\ObjectIterator;
 
-abstract class UniqueObjectCollection implements IUniqueObjectCollection
+/**
+ * @template IdentifiableObject of object
+ */
+abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 {
 
 	/**
 	 * @var array|mixed[]
 	 */
-	protected $data = [];
+	protected array $data = [];
+
+	abstract protected function getItemType(): string;
+
+
+	/**
+	 * @param IdentifiableObject $item
+	 * @return string|int
+	 */
+	abstract protected function getIdentifier(object $item);
+
 
 	/**
 	 * Skips items with duplicate key
 	 */
-	public function __construct(array $data)
+	final public function __construct(array $data)
 	{
 		$classItemName = $this->getItemType();
 		$uniqueItems = [];
@@ -26,12 +39,32 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 			$this->assertItemType($item, $classItemName);
 
 			$identifier = $this->getIdentifier($item);
+
 			if (!$this->exists($identifier)) {
 				$uniqueItems[$identifier] = $item;
 			}
 		}
 
 		$this->data = $uniqueItems;
+	}
+
+
+	/**
+	 * @return static
+	 */
+	public static function createFromImmutableObjectCollection(
+		ImmutableObjectCollection $immutableObjectCollection
+	)
+	{
+		$privateAccessor = \Closure::bind(
+			static function (ImmutableObjectCollection $immutableObjectCollection): array {
+				return $immutableObjectCollection->data;
+			},
+			null,
+			$immutableObjectCollection
+		);
+
+		return new static($privateAccessor($immutableObjectCollection));
 	}
 
 
@@ -42,7 +75,6 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
-	 * @param UniqueObjectCollection $collection
 	 * @throws \RuntimeException
 	 * @return static
 	 */
@@ -59,36 +91,6 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
-	 * @param ImmutableObjectCollection $immutableObjectCollection
-	 *
-	 * @return static
-	 */
-	public static function createFromImmutableObjectCollection(
-		ImmutableObjectCollection $immutableObjectCollection
-	)
-	{
-		$privateAccessor = \Closure::bind(
-			static function (ImmutableObjectCollection $immutableObjectCollection) {
-				return $immutableObjectCollection->data;
-			},
-			null,
-			$immutableObjectCollection
-		);
-
-		return new static($privateAccessor($immutableObjectCollection));
-	}
-
-
-	protected function getItems(): array
-	{
-		return $this->data;
-	}
-
-
-	/**
-	 * @param int      $offset
-	 * @param int|null $limit
-	 *
 	 * @return static
 	 */
 	public function slice(int $offset, ?int $limit = null)
@@ -105,12 +107,9 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
-	 * @param callable $callback
-	 * @param int $flag
-	 *
 	 * @return static
 	 */
-	public function filter(callable $callback, $flag = 0)
+	public function filter(callable $callback, int $flag = 0)
 	{
 		return new static(
 			array_filter(
@@ -141,16 +140,16 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
-	 * @param mixed $item
-	 *
+	 * @param IdentifiableObject $item
 	 * @return static
 	 * @throws DuplicateKeyException
 	 */
-	public function addItem($item)
+	public function addItem(object $item)
 	{
 		$this->assertItemType($item, $this->getItemType());
 
 		$identifier = $this->getIdentifier($item);
+
 		if ($this->exists($identifier)) {
 			throw new DuplicateKeyException($identifier);
 		}
@@ -164,38 +163,11 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
-	 * @param mixed $item
-	 * @param string|int $type
-	 */
-	private function assertItemType($item, $type): void
-	{
-		if (!$item instanceof $type) {
-			throw new \InvalidArgumentException(static::class . ' only accepts ' . $type);
-		}
-	}
-
-
-	/**
 	 * @param string|int $key
-	 *
-	 * @return bool
 	 */
 	public function exists($key): bool
 	{
 		return array_key_exists($key, $this->data);
-	}
-
-
-	/**
-	 * @param mixed $item
-	 *
-	 * @return bool
-	 */
-	protected function contains($item): bool
-	{
-		return $this->exists(
-			$this->getIdentifier($item)
-		);
 	}
 
 
@@ -242,13 +214,30 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 	}
 
 
-	abstract protected function getItemType(): string;
+	protected function getItems(): array
+	{
+		return $this->data;
+	}
 
 
 	/**
-	 * @param mixed $item
-	 *
-	 * @return string|int
+	 * @param IdentifiableObject $item
 	 */
-	abstract protected function getIdentifier($item);
+	protected function contains(object $item): bool
+	{
+		return $this->exists(
+			$this->getIdentifier($item)
+		);
+	}
+
+
+	/**
+	 * @param IdentifiableObject $item
+	 */
+	private function assertItemType(object $item, string $type): void
+	{
+		if (!$item instanceof $type) {
+			throw new \InvalidArgumentException(static::class . ' only accepts ' . $type);
+		}
+	}
 }

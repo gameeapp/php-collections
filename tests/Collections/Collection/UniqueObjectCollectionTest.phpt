@@ -9,7 +9,6 @@ require_once __DIR__ . '/../../bootstrap.php';
 use Gamee\Collections\Collection\ImmutableObjectCollection;
 use Gamee\Collections\Collection\ItemDoesNotExistException;
 use Gamee\Collections\Collection\UniqueObjectCollection;
-use Gamee\Collections\Tests\Collections\Collection\MockActualUniqueObjectCollection;
 use Gamee\Collections\Tests\Utilities\AnotherClass;
 use Gamee\Collections\Tests\Utilities\DummyUniqueItemCollection;
 use Gamee\Collections\Tests\Utilities\ItemClass;
@@ -175,6 +174,7 @@ class UniqueObjectCollectionTest extends TestCase
 		$collection = $this->createTestCollection($items);
 
 		$outerIterationItemCount = 0;
+
 		foreach ($collection as $key => $item) {
 			foreach ($collection as $innerKey => $innerItem) {
 				Assert::same($items[$innerKey], $innerItem);
@@ -369,14 +369,12 @@ class UniqueObjectCollectionTest extends TestCase
 		];
 	}
 
-	/**
-	 * @return MockActualUniqueObjectCollection
-	 */
-	private function createTestCollection($inputArray = null): MockActualUniqueObjectCollection
-	{
-		$inputArray = $inputArray ?? [new ItemClass(1), new ItemClass(2)];
 
-		return new class($inputArray) extends UniqueObjectCollection implements MockActualUniqueObjectCollection
+	private function createTestCollection(?array $inputArray = null): UniqueObjectCollection
+	{
+		$inputArray ??= [new ItemClass(1), new ItemClass(2)];
+
+		return new class($inputArray) extends UniqueObjectCollection
 		{
 
 			public function getItemType(): string
@@ -387,34 +385,28 @@ class UniqueObjectCollectionTest extends TestCase
 
 			/**
 			 * @param ItemClass $item
-			 *
-			 * @return int
 			 */
-			protected function getIdentifier($item): int
+			public function contains(object $item): bool
 			{
-				return $item->getValue();
+				return parent::contains($item);
 			}
 
 
 			/**
 			 * @param ItemClass $item
-			 *
-			 * @return bool
+			 * @return string|int
 			 */
-			public function contains($item): bool
+			protected function getIdentifier(object $item)
 			{
-				return parent::contains($item);
+				return $item->getValue();
 			}
 		};
 	}
 
 
-	/**
-	 * @return MockActualUniqueObjectCollection
-	 */
-	private function createAnotherTestCollection(array $inputArray): MockActualUniqueObjectCollection
+	private function createAnotherTestCollection(array $inputArray): UniqueObjectCollection
 	{
-		return new class($inputArray) extends UniqueObjectCollection implements MockActualUniqueObjectCollection
+		return new class($inputArray) extends UniqueObjectCollection
 		{
 
 			public function getItemType(): string
@@ -425,23 +417,20 @@ class UniqueObjectCollectionTest extends TestCase
 
 			/**
 			 * @param AnotherClass $item
-			 *
-			 * @return int
 			 */
-			protected function getIdentifier($item): int
+			public function contains(object $item): bool
 			{
-				return $item->getValue();
+				return parent::contains($item);
 			}
 
 
 			/**
 			 * @param AnotherClass $item
-			 *
-			 * @return bool
+			 * @return string|int
 			 */
-			public function contains($item): bool
+			protected function getIdentifier(object $item)
 			{
-				return parent::contains($item);
+				return $item->getValue();
 			}
 		};
 	}

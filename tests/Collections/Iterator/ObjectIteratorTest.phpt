@@ -16,7 +16,7 @@ use Tester\TestCase;
 class ObjectIteratorTest extends TestCase
 {
 
-	public function testBasicFunctionality()
+	public function testBasicFunctionality(): void
 	{
 		$objectIterator = new ObjectIterator([1, 2, 3]);
 
