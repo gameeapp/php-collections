@@ -8,7 +8,14 @@ interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
 {
 
 	/**
-	 * @param UniqueObjectCollection $collection
+	 * @return static
+	 */
+	public static function createFromImmutableObjectCollection(
+		ImmutableObjectCollection $immutableObjectCollection
+	);
+
+
+	/**
 	 * @throws \RuntimeException
 	 * @return static
 	 */
@@ -16,21 +23,15 @@ interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
 
 
 	/**
-	 * @param int      $offset
-	 * @param int|null $limit
-	 *
 	 * @return static
 	 */
 	public function slice(int $offset, ?int $limit = null);
 
 
 	/**
-	 * @param callable $callback
-	 * @param int $flag
-	 *
 	 * @return static
 	 */
-	public function filter(callable $callback, $flag = 0);
+	public function filter(callable $callback, int $flag = 0);
 
 
 	public function map(callable $callback): array;
@@ -43,28 +44,14 @@ interface IUniqueObjectCollection extends \Countable, \IteratorAggregate
 
 
 	/**
-	 * @param ImmutableObjectCollection $immutableObjectCollection
-	 *
-	 * @return static
-	 */
-	public static function createFromImmutableObjectCollection(
-		ImmutableObjectCollection $immutableObjectCollection
-	);
-
-
-	/**
-	 * @param mixed $item
-	 *
 	 * @return static
 	 * @throws DuplicateKeyException
 	 */
-	public function addItem($item);
+	public function addItem(object $item);
 
 
 	/**
 	 * @param string|int $key
-	 *
-	 * @return bool
 	 */
 	public function exists($key): bool;
 

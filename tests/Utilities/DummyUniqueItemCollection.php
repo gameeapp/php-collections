@@ -16,11 +16,11 @@ final class DummyUniqueItemCollection extends UniqueObjectCollection
 
 
 	/**
-	 * {@inheritDoc}
+	 * @param ItemClass $item
+	 * @return string|int
 	 */
-	protected function getIdentifier($item)
+	protected function getIdentifier(object $item)
 	{
-		/** @var ItemClass $item */
 		return $item->getValue();
 	}
 }
