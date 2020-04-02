@@ -6,7 +6,10 @@ namespace Gamee\Collections\Collection;
 
 use Gamee\Collections\Iterator\ObjectIterator;
 
-abstract class UniqueObjectCollection implements IUniqueObjectCollection
+/**
+ * @template IdentifiableObject of object
+ */
+abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 {
 
 	/**
@@ -18,6 +21,7 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
+	 * @param IdentifiableObject $item
 	 * @return string|int
 	 */
 	abstract protected function getIdentifier(object $item);
@@ -136,6 +140,7 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 
 
 	/**
+	 * @param IdentifiableObject $item
 	 * @return static
 	 * @throws DuplicateKeyException
 	 */
@@ -215,6 +220,9 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 	}
 
 
+	/**
+	 * @param IdentifiableObject $item
+	 */
 	protected function contains(object $item): bool
 	{
 		return $this->exists(
@@ -223,6 +231,9 @@ abstract class UniqueObjectCollection implements IUniqueObjectCollection
 	}
 
 
+	/**
+	 * @param IdentifiableObject $item
+	 */
 	private function assertItemType(object $item, string $type): void
 	{
 		if (!$item instanceof $type) {

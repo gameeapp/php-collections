@@ -6,6 +6,9 @@ namespace Gamee\Collections\Tests\Utilities;
 
 use Gamee\Collections\Collection\UniqueObjectCollection;
 
+/**
+ * @extends UniqueObjectCollection<ItemClass>
+ */
 final class DummyUniqueItemCollection extends UniqueObjectCollection
 {
 

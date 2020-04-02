@@ -9,7 +9,6 @@ require_once __DIR__ . '/../../bootstrap.php';
 use Gamee\Collections\Collection\ImmutableObjectCollection;
 use Gamee\Collections\Collection\ItemDoesNotExistException;
 use Gamee\Collections\Collection\UniqueObjectCollection;
-use Gamee\Collections\Tests\Collections\Collection\MockActualUniqueObjectCollection;
 use Gamee\Collections\Tests\Utilities\AnotherClass;
 use Gamee\Collections\Tests\Utilities\DummyUniqueItemCollection;
 use Gamee\Collections\Tests\Utilities\ItemClass;
@@ -371,11 +370,11 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
-	private function createTestCollection(?array $inputArray = null): MockActualUniqueObjectCollection
+	private function createTestCollection(?array $inputArray = null): UniqueObjectCollection
 	{
 		$inputArray ??= [new ItemClass(1), new ItemClass(2)];
 
-		return new class($inputArray) extends UniqueObjectCollection implements MockActualUniqueObjectCollection
+		return new class($inputArray) extends UniqueObjectCollection
 		{
 
 			public function getItemType(): string
@@ -405,9 +404,9 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
-	private function createAnotherTestCollection(array $inputArray): MockActualUniqueObjectCollection
+	private function createAnotherTestCollection(array $inputArray): UniqueObjectCollection
 	{
-		return new class($inputArray) extends UniqueObjectCollection implements MockActualUniqueObjectCollection
+		return new class($inputArray) extends UniqueObjectCollection
 		{
 
 			public function getItemType(): string
