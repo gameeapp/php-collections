@@ -29,6 +29,7 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 
 	/**
 	 * Skips items with duplicate key
+	 * @param array<mixed> $data
 	 */
 	public function __construct(array $data)
 	{
@@ -214,20 +215,20 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	}
 
 
-	protected function getItems(): array
-	{
-		return $this->data;
-	}
-
-
 	/**
 	 * @param IdentifiableObject $item
 	 */
-	protected function contains(object $item): bool
+	public function contains(object $item): bool
 	{
 		return $this->exists(
 			$this->getIdentifier($item)
 		);
+	}
+
+
+	protected function getItems(): array
+	{
+		return $this->data;
 	}
 
 
