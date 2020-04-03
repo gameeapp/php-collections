@@ -30,7 +30,7 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	/**
 	 * Skips items with duplicate key
 	 */
-	final public function __construct(array $data)
+	public function __construct(array $data)
 	{
 		$classItemName = $this->getItemType();
 		$uniqueItems = [];

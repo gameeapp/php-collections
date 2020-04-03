@@ -1,0 +1,8 @@
+includes:
+	- vendor/gamee/php-code-checker-rules/phpstan.neon
+
+parameters:
+	ignoreErrors:
+		-
+			message: '/Unsafe usage of new static\(\)\..*/'
+			path: src/Collection/UniqueObjectCollection.php
