@@ -14,7 +14,7 @@ final class ItemDoesNotExistException extends \Exception
 	{
 		parent::__construct(
 			sprintf(
-				'Item with key "%s" not exists.',
+				'Item with key "%s" does not exist.',
 				$key
 			)
 		);
