@@ -57,20 +57,6 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
-	public function testExceptionOnWrongItemTypeDuringCreation(): void
-	{
-		Assert::exception(function (): void {
-			$this->createTestCollection(
-				[
-					new ItemClass(1),
-					new AnotherClass(2),
-					new ItemClass(3),
-				]
-			);
-		}, \InvalidArgumentException::class);
-	}
-
-
 	public function testMergeWith(): void
 	{
 		$items = [
@@ -348,16 +334,6 @@ class UniqueObjectCollectionTest extends TestCase
 
 		Assert::same($expectedItemCount, count($collection));
 		Assert::same($expectedItemCount + 1, count($newCollection));
-	}
-
-
-	public function testExceptionOnWrongItemTypeInAddItem(): void
-	{
-		$collection = $this->createTestCollection();
-
-		Assert::exception(function () use ($collection): void {
-			$collection->addItem(new AnotherClass(3));
-		}, \InvalidArgumentException::class);
 	}
 
 

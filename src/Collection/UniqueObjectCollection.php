@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Collection;
 
-use Gamee\Collections\Iterator\ObjectIterator;
-
 /**
  * @template IdentifiableObject of object
  */
@@ -13,10 +11,14 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 {
 
 	/**
-	 * @var array|mixed[]
+	 * @var array<IdentifiableObject>
 	 */
 	protected array $data = [];
 
+
+	/**
+	 * @deprecated
+	 */
 	abstract protected function getItemType(): string;
 
 
@@ -29,16 +31,13 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 
 	/**
 	 * Skips items with duplicate key
-	 * @param array<mixed> $data
+	 * @param array<IdentifiableObject> $data
 	 */
 	public function __construct(array $data)
 	{
-		$classItemName = $this->getItemType();
 		$uniqueItems = [];
 
 		foreach ($data as $item) {
-			$this->assertItemType($item, $classItemName);
-
 			$identifier = $this->getIdentifier($item);
 
 			if (!$this->exists($identifier)) {
@@ -52,6 +51,7 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 
 	/**
 	 * @return static
+	 * @deprecated
 	 */
 	public static function createFromImmutableObjectCollection(
 		ImmutableObjectCollection $immutableObjectCollection
@@ -69,9 +69,12 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	}
 
 
-	public function getIterator(): ObjectIterator
+	/**
+	 * @return \ArrayIterator<IdentifiableObject>
+	 */
+	public function getIterator(): \ArrayIterator
 	{
-		return new ObjectIterator($this->data);
+		return new \ArrayIterator($this->data);
 	}
 
 
@@ -81,7 +84,7 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	 */
 	public function mergeWith(UniqueObjectCollection $collection)
 	{
-		if ($this->getItemType() !== $collection->getItemType()) {
+		if (get_class($collection) !== static::class) {
 			throw new \RuntimeException('Can not merge collections with different item type');
 		}
 
@@ -147,8 +150,6 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	 */
 	public function addItem(object $item)
 	{
-		$this->assertItemType($item, $this->getItemType());
-
 		$identifier = $this->getIdentifier($item);
 
 		if ($this->exists($identifier)) {
@@ -229,16 +230,5 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	protected function getItems(): array
 	{
 		return $this->data;
-	}
-
-
-	/**
-	 * @param IdentifiableObject $item
-	 */
-	private function assertItemType(object $item, string $type): void
-	{
-		if (!$item instanceof $type) {
-			throw new \InvalidArgumentException(static::class . ' only accepts ' . $type);
-		}
 	}
 }
