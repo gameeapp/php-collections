@@ -17,12 +17,6 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 
 
 	/**
-	 * @deprecated
-	 */
-	abstract protected function getItemType(): string;
-
-
-	/**
 	 * @param IdentifiableObject $item
 	 * @return string|int
 	 */
@@ -46,26 +40,6 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 		}
 
 		$this->data = $uniqueItems;
-	}
-
-
-	/**
-	 * @return static
-	 * @deprecated
-	 */
-	public static function createFromImmutableObjectCollection(
-		ImmutableObjectCollection $immutableObjectCollection
-	)
-	{
-		$privateAccessor = \Closure::bind(
-			static function (ImmutableObjectCollection $immutableObjectCollection): array {
-				return $immutableObjectCollection->data;
-			},
-			null,
-			$immutableObjectCollection
-		);
-
-		return new static($privateAccessor($immutableObjectCollection));
 	}
 
 
