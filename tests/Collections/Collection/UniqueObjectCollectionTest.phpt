@@ -6,11 +6,9 @@ namespace Gamee\Collections\Tests\Collection;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-use Gamee\Collections\Collection\ImmutableObjectCollection;
 use Gamee\Collections\Collection\ItemDoesNotExistException;
 use Gamee\Collections\Collection\UniqueObjectCollection;
 use Gamee\Collections\Tests\Utilities\AnotherClass;
-use Gamee\Collections\Tests\Utilities\DummyUniqueItemCollection;
 use Gamee\Collections\Tests\Utilities\ItemClass;
 use Tester\Assert;
 use Tester\TestCase;
@@ -102,30 +100,6 @@ class UniqueObjectCollectionTest extends TestCase
 		Assert::exception(function () use ($collection1, $collection2): void {
 			$collection1->mergeWith($collection2);
 		}, \RuntimeException::class);
-	}
-
-
-	public function testCreateFromImmutableObjectCollection(): void
-	{
-		$items = [
-			new ItemClass(1),
-			new ItemClass(2),
-			new ItemClass(3),
-			new ItemClass(4),
-			new ItemClass(5),
-		];
-
-		$immutableObjectCollection = new class ($items) extends ImmutableObjectCollection
-		{
-			protected function getItemType(): string
-			{
-				return ItemClass::class;
-			}
-		};
-
-		$uniqueCollection = DummyUniqueItemCollection::createFromImmutableObjectCollection($immutableObjectCollection);
-
-		Assert::same(5, count($uniqueCollection));
 	}
 
 
@@ -353,12 +327,6 @@ class UniqueObjectCollectionTest extends TestCase
 		return new class($inputArray) extends UniqueObjectCollection
 		{
 
-			public function getItemType(): string
-			{
-				return ItemClass::class;
-			}
-
-
 			/**
 			 * @param ItemClass $item
 			 */
@@ -384,12 +352,6 @@ class UniqueObjectCollectionTest extends TestCase
 	{
 		return new class($inputArray) extends UniqueObjectCollection
 		{
-
-			public function getItemType(): string
-			{
-				return AnotherClass::class;
-			}
-
 
 			/**
 			 * @param AnotherClass $item

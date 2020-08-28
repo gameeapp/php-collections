@@ -19,12 +19,6 @@ use Gamee\Collections\Collection\UniqueObjectCollection;
 final class UserDataCollection extends UniqueObjectCollection
 {
 
-	protected function getItemType(): string
-	{
-		return UserData::class;
-	}
-
-
 	/**
 	 * @param UserData $item
 	 * @return string|int
