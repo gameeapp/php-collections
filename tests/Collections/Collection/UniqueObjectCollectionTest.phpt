@@ -215,6 +215,28 @@ class UniqueObjectCollectionTest extends TestCase
 	}
 
 
+	public function testWalk(): void
+	{
+		$items = [
+			new ItemClass(1),
+			new ItemClass(5),
+			new ItemClass(30),
+		];
+
+		$collection = $this->createTestCollection($items);
+
+		$collection->walk(
+			static function (ItemClass $itemClass) {
+				$itemClass->setValue($itemClass->getValue() + 1);
+			}
+		);
+
+		Assert::same(2, $collection->get(1)->getValue());
+		Assert::same(6, $collection->get(5)->getValue());
+		Assert::same(31, $collection->get(30)->getValue());
+	}
+
+
 	public function getScalarIds(): void
 	{
 		$items = [
