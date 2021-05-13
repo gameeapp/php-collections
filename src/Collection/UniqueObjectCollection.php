@@ -108,6 +108,15 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
 	}
 
 
+	public function walk(callable $callback): void
+	{
+		array_walk(
+			$this->data,
+			$callback
+		);
+	}
+
+
 	/**
 	 * @return array|int[]|string[]
 	 */
