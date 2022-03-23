@@ -1,37 +1,37 @@
 {
-	"name": "gamee/php-collections",
-	"description": "package of usefull collections for php",
-	"type": "library",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Gamee",
-			"email": "hello@gameeapp.com"
-		}
-	],
-	"minimum-stability": "dev",
-	"prefer-stable": true,
-	"require": {
-		"php": ">=7.4"
-	},
-	"require-dev": {
-		"nette/tester": "^2.0",
-		"gamee/php-code-checker-rules": "^2.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Gamee\\Collections\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Gamee\\Collections\\Tests\\": "tests/"
-		}
-	},
-	"scripts": {
-		"tests": "php vendor/nette/tester/src/tester.php tests -C",
-		"phpstan": "vendor/bin/phpstan analyse src tests -c phpstan.neon --level 8",
-		"phpcs": "vendor/bin/phpcs --standard=vendor/gamee/php-code-checker-rules/ruleset.xml --extensions=php,phpt --tab-width=4 --ignore=temp -sp src tests",
-		"phpcsfix": "vendor/bin/phpcbf --standard=vendor/gamee/php-code-checker-rules/ruleset.xml --extensions=php,phpt --tab-width=4 --ignore=temp -sp src tests"
-	}
+    "name": "gamee/php-collections",
+    "description": "package of useful collections for php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gamee",
+            "email": "hello@gameeapp.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.1",
+        "codeception/module-asserts": "^1.3",
+        "gamee/php-code-checker-rules": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gamee\\Collections\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gamee\\Collections\\": "tests/unit/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
+    }
 }

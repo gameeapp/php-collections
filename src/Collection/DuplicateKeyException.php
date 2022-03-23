@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Collection;
 
-final class DuplicateKeyException extends \Exception
+final class DuplicateKeyException extends CollectionException
 {
-
-	/**
-	 * DuplicateKeyException constructor.
-	 *
-	 * @param string|int $key
-	 */
-	public function __construct($key)
-	{
-		parent::__construct(
-			sprintf(
-				'Item with key: "%s" already exists.',
-				$key
-			)
-		);
-	}
+    public function __construct(string|int $key)
+    {
+        parent::__construct(
+            \sprintf(
+                'Item with key: "%s" already exists.',
+                $key,
+            ),
+        );
+    }
 }

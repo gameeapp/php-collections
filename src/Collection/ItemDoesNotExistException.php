@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Gamee\Collections\Collection;
 
-final class ItemDoesNotExistException extends \Exception
+final class ItemDoesNotExistException extends CollectionException
 {
-
-	/**
-	 * @param string|int $key
-	 */
-	public function __construct($key)
-	{
-		parent::__construct(
-			sprintf(
-				'Item with key "%s" does not exist.',
-				$key
-			)
-		);
-	}
+    public function __construct(string|int $key, string $type = 'key')
+    {
+        parent::__construct(
+            \sprintf(
+                'Item with %s "%s" does not exist.',
+                $type,
+                $key,
+            ),
+        );
+    }
 }
