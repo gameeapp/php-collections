@@ -6,3 +6,13 @@ composer.lock
 *.iml
 out
 gen
+
+# Test
+tests/_data/*
+!tests/_data/.gitkeep
+tests/_output/*
+!tests/_output/.gitkeep
+tests/temp/*
+!tests/temp/.gitkeep
+tests/log/*
+!tests/log/.gitkeep
