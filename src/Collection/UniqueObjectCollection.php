@@ -6,12 +6,12 @@ namespace Gamee\Collections\Collection;
 
 /**
  * @template IdentifiableObject of object
+ *
+ * @implements \IteratorAggregate<int, IdentifiableObject>
  */
-abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
+class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
-    /**
-     * @var array<IdentifiableObject>
-     */
+    /** @var array<IdentifiableObject> */
     protected array $data = [];
 
 
@@ -34,7 +34,7 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
      */
     public function fillEmptyCollection(array $data): void
     {
-        if ($this->data !== []) {
+        if ($this->isNotEmpty()) {
             throw new CollectionIsNotEmptyException;
         }
 
@@ -118,6 +118,21 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
             $callback,
             $this->data,
         );
+    }
+
+
+    public function mapWithCustomKey(
+        callable $keyCallback,
+        callable $valueCallback,
+    ): array
+    {
+        $result = [];
+
+        foreach ($this->data as $item) {
+            $result[$keyCallback($item)] = $valueCallback($item);
+        }
+
+        return $result;
     }
 
 
@@ -275,6 +290,23 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
     }
 
 
+    /**
+     * @phpstan-param callable(IdentifiableObject): bool $condition
+     *
+     * @return IdentifiableObject|null
+     */
+    public function findFirstByCondition(callable $condition)
+    {
+        foreach ($this->data as $item) {
+            if ($condition($item)) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+
     public function count(): int
     {
         return \count($this->data);
@@ -287,6 +319,12 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
     }
 
 
+    public function isNotEmpty(): bool
+    {
+        return !$this->isEmpty();
+    }
+
+
     /**
      * @param IdentifiableObject $item
      */
@@ -295,6 +333,12 @@ abstract class UniqueObjectCollection implements \Countable, \IteratorAggregate
         return $this->exists(
             $this->getIdentifier($item),
         );
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return \array_values($this->getItems());
     }
 
 

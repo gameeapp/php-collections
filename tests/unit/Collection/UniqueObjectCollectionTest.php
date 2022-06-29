@@ -28,6 +28,15 @@ class UniqueObjectCollectionTest extends Unit
     }
 
 
+    /**
+     * @dataProvider collectionDataProvider
+     */
+    public function testIsNotEmpty(UniqueObjectCollection $collection, int $expectedItemCount): void
+    {
+        Assert::same($collection->isNotEmpty(), $expectedItemCount !== 0);
+    }
+
+
     public function testFillEmptyCollection(): void
     {
         $collection = new ItemClassCollection([]);
@@ -237,6 +246,32 @@ class UniqueObjectCollectionTest extends Unit
                 1 => 2,
                 5 => 6,
                 30 => 31,
+            ],
+        );
+    }
+
+
+    public function testMapWithCustomKey(): void
+    {
+        $items = [
+            new ItemClass(1),
+            new ItemClass(5),
+            new ItemClass(30),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $actual = $collection->mapWithCustomKey(
+            static fn (ItemClass $itemClass) => $itemClass->getValue() - 1,
+            static fn (ItemClass $itemClass) => $itemClass->getValue() + 1,
+        );
+
+        Assert::same(
+            $actual,
+            [
+                0 => 2,
+                4 => 6,
+                29 => 31,
             ],
         );
     }
@@ -526,6 +561,25 @@ class UniqueObjectCollectionTest extends Unit
     }
 
 
+    public function testFindFirstByCondition(): void
+    {
+        $collection = new ItemClassCollection(
+            [
+                new ItemClass(2),
+                new ItemClass(4),
+                new ItemClass(8),
+            ],
+        );
+
+        Assert::same(
+            $collection->findFirstByCondition(
+                static fn (ItemClass $itemClass): bool => $itemClass->getValue() > 3,
+            )?->getValue(),
+            4,
+        );
+    }
+
+
     public function testContains(): void
     {
         $itemInCollection = new ItemClass(1);
@@ -535,6 +589,23 @@ class UniqueObjectCollectionTest extends Unit
 
         Assert::true($collection->contains($itemInCollection));
         Assert::false($collection->contains($itemNotInCollection));
+    }
+
+
+    public function testJsonSerialize(): void
+    {
+        $collection = new UniqueObjectCollection(
+            [
+                new JsonSerializableClass(3),
+                new JsonSerializableClass(5),
+                new JsonSerializableClass(7),
+            ],
+        );
+
+        Assert::same(
+            \json_encode($collection, JSON_THROW_ON_ERROR),
+            '[{"value":3},{"value":5},{"value":7}]',
+        );
     }
 
 
