@@ -218,15 +218,15 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
 
 
     /**
-     * Starts with zero (0)
-     *
      * @return IdentifiableObject
      *
      * @throws ItemDoesNotExistException
      */
     public function getFirst()
     {
-        return $this->getByIndex(1);
+        return $this->get(
+            \array_key_first($this->data) ?? throw new ItemDoesNotExistException('first', 'index'),
+        );
     }
 
 
@@ -237,8 +237,8 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
      */
     public function getLast()
     {
-        return $this->getByIndex(
-            \count($this->data),
+        return $this->get(
+            \array_key_last($this->data) ?? throw new ItemDoesNotExistException('last', 'index'),
         );
     }
 
@@ -336,9 +336,21 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
     }
 
 
-    public function jsonSerialize(): array
+    /**
+     * @return array<int, IdentifiableObject>
+     */
+    public function toList(): array
     {
         return \array_values($this->getItems());
+    }
+
+
+    /**
+     * @return array<int, IdentifiableObject>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toList();
     }
 
 
@@ -351,6 +363,9 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
     }
 
 
+    /**
+     * @return array<int|string, IdentifiableObject>
+     */
     protected function getItems(): array
     {
         return $this->data;
