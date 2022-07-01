@@ -592,6 +592,42 @@ class UniqueObjectCollectionTest extends Unit
     }
 
 
+    public function testToList(): void
+    {
+        $list = [
+            new JsonSerializableClass(3),
+            new JsonSerializableClass(5),
+            new JsonSerializableClass(7),
+        ];
+
+        $collection = new UniqueObjectCollection(
+            $list,
+        );
+
+        $listFromCollection = $collection->toList();
+
+        Assert::same(
+            count($listFromCollection),
+            count($list),
+        );
+
+        Assert::same(
+            array_keys($listFromCollection),
+            array_keys($list),
+        );
+
+        Assert::same(
+            $listFromCollection[0],
+            $list[0],
+        );
+
+        Assert::same(
+            $listFromCollection[1],
+            $list[1],
+        );
+    }
+
+
     public function testJsonSerialize(): void
     {
         $collection = new UniqueObjectCollection(
