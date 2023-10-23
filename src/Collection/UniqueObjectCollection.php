@@ -136,12 +136,95 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
     }
 
 
+    public function mapBy(
+        callable $keyCallback,
+    ): array
+    {
+        $result = [];
+
+        foreach ($this->data as $item) {
+            $result[$keyCallback($item)] = $item;
+        }
+
+        return $result;
+    }
+
+
     public function walk(callable $callback): void
     {
         \array_walk(
             $this->data,
             $callback,
         );
+    }
+
+
+    public function sortBy(callable $callback): void
+    {
+        \uasort(
+            $this->data,
+            $callback,
+        );
+    }
+
+
+    public function min(callable $callback): mixed
+    {
+        return \min(
+            $this->map($callback),
+        );
+    }
+
+
+    public function max(callable $callback): mixed
+    {
+        return \max(
+            $this->map($callback),
+        );
+    }
+
+
+    /**
+     * @return IdentifiableObject
+     */
+    public function rand(): object
+    {
+        return $this->data[\array_rand($this->data, 1)];
+    }
+
+
+    public function randCollection(int $numberOfItems): static
+    {
+        $keys = \array_rand($this->data, $numberOfItems);
+
+        if (!\is_array($keys)) {
+            $keys = [$keys];
+        }
+
+        return new static(
+            \array_intersect_key(
+                $this->data,
+                \array_flip($keys),
+            ),
+        );
+    }
+
+
+    public function all(callable $callback): bool
+    {
+        return \count($this->filter($callback)) === \count($this->data);
+    }
+
+
+    public function any(callable $callback): bool
+    {
+        return \count($this->filter($callback)) > 0;
+    }
+
+
+    public function none(callable $callback): bool
+    {
+        return \count($this->filter($callback)) === 0;
     }
 
 

@@ -6,7 +6,10 @@ namespace Gamee\Collections\Collection;
 
 class ItemClass
 {
-    public function __construct(private int $value)
+    public function __construct(
+        private int $value,
+        private ?int $optional = null,
+    )
     {
     }
 
@@ -20,5 +23,17 @@ class ItemClass
     public function setValue(int $value): void
     {
         $this->value = $value;
+    }
+
+
+    public function getOptional(): ?int
+    {
+        return $this->optional;
+    }
+
+
+    public function setOptional(?int $optional): void
+    {
+        $this->optional = $optional;
     }
 }
