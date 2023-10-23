@@ -277,6 +277,31 @@ class UniqueObjectCollectionTest extends Unit
     }
 
 
+    public function testMapBy(): void
+    {
+        $items = [
+            $i1 = new ItemClass(1, 13),
+            $i2 = new ItemClass(5, 10),
+            $i3 = new ItemClass(30, 11),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $actual = $collection->mapBy(
+            static fn (ItemClass $itemClass) => $itemClass->getOptional(),
+        );
+
+        Assert::same(
+            $actual,
+            [
+                13 => $i1,
+                10 => $i2,
+                11 => $i3,
+            ],
+        );
+    }
+
+
     /**
      * @throws ItemDoesNotExistException
      */
@@ -299,6 +324,183 @@ class UniqueObjectCollectionTest extends Unit
         Assert::same($collection->get(1)->getValue(), 2);
         Assert::same($collection->get(5)->getValue(), 6);
         Assert::same($collection->get(30)->getValue(), 31);
+    }
+
+
+    /**
+     * @throws ItemDoesNotExistException
+     */
+    public function testSortBy(): void
+    {
+        $items = [
+            new ItemClass(132),
+            new ItemClass(5),
+            new ItemClass(30),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $collection->sortBy(
+            static fn (ItemClass $a, ItemClass $b): int => $a->getValue() <=> $b->getValue(),
+        );
+
+        Assert::same($collection->getFirst()->getValue(), 5);
+        Assert::same($collection->getByIndex(2)->getValue(), 30);
+        Assert::same($collection->getLast()->getValue(), 132);
+    }
+
+
+    public function testMin(): void
+    {
+        $items = [
+            new ItemClass(8),
+            new ItemClass(5),
+            new ItemClass(30),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $min = $collection->min(
+            static fn (ItemClass $itemClass): int => $itemClass->getValue(),
+        );
+
+        Assert::same($min, 5);
+    }
+
+
+    public function testMax(): void
+    {
+        $items = [
+            new ItemClass(8),
+            new ItemClass(30),
+            new ItemClass(29),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $max = $collection->max(
+            static fn (ItemClass $itemClass): int => $itemClass->getValue(),
+        );
+
+        Assert::same($max, 30);
+    }
+
+
+    public function testRand(): void
+    {
+        $collection = $this->createCollectionWithItems(100);
+
+        $a = $collection->rand();
+        $b = $collection->rand();
+        $c = $collection->rand();
+
+        Assert::notSame($a, $b);
+        Assert::notSame($b, $c);
+        Assert::notSame($a, $c);
+    }
+
+
+    public function testRandCollection(): void
+    {
+        $collection = $this->createCollectionWithItems(100);
+
+        $count = 3;
+
+        $randCollection = $collection->randCollection($count);
+
+        Assert::same($randCollection->count(), $count);
+
+        $a = $randCollection->getByIndex(1);
+        $b = $randCollection->getByIndex(2);
+        $c = $randCollection->getByIndex(3);
+
+        Assert::notSame($a, $b);
+        Assert::notSame($b, $c);
+        Assert::notSame($a, $c);
+    }
+
+
+    /**
+     * @dataProvider allDataProvider
+     */
+    public function testAll(int $a, int $b, int $c, int $condition, bool $expected): void
+    {
+        $items = [
+            new ItemClass($a),
+            new ItemClass($b),
+            new ItemClass($c),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $all = $collection->all(
+            static fn (ItemClass $itemClass): bool => $itemClass->getValue() >= $condition,
+        );
+
+        Assert::same($all, $expected);
+    }
+
+
+    public function allDataProvider(): \Generator
+    {
+        yield 'all bigger/equal than' => [9, 8, 15, 8, true];
+        yield 'one lesser' => [9, 7, 15, 8, false];
+    }
+
+
+    /**
+     * @dataProvider anyDataProvider
+     */
+    public function testAny(int $a, int $b, int $c, int $condition, bool $expected): void
+    {
+        $items = [
+            new ItemClass($a),
+            new ItemClass($b),
+            new ItemClass($c),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $any = $collection->any(
+            static fn (ItemClass $itemClass): bool => $itemClass->getValue() >= $condition,
+        );
+
+        Assert::same($any, $expected);
+    }
+
+
+    public function anyDataProvider(): \Generator
+    {
+        yield 'at least one bigger/equal than' => [1, 8, 3, 8, true];
+        yield 'none bigger/equal than' => [1, 1, 1, 8, false];
+    }
+
+
+    /**
+     * @dataProvider noneDataProvider
+     */
+    public function testNone(int $a, int $b, int $c, int $condition, bool $expected): void
+    {
+        $items = [
+            new ItemClass($a),
+            new ItemClass($b),
+            new ItemClass($c),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $none = $collection->none(
+            static fn (ItemClass $itemClass): bool => $itemClass->getValue() >= $condition,
+        );
+
+        Assert::same($none, $expected);
+    }
+
+
+    public function noneDataProvider(): \Generator
+    {
+        yield 'at least one bigger/equal than' => [1, 8, 3, 8, false];
+        yield 'none bigger/equal than' => [1, 1, 1, 8, true];
     }
 
 
@@ -607,13 +809,13 @@ class UniqueObjectCollectionTest extends Unit
         $listFromCollection = $collection->toList();
 
         Assert::same(
-            count($listFromCollection),
-            count($list),
+            \count($listFromCollection),
+            \count($list),
         );
 
         Assert::same(
-            array_keys($listFromCollection),
-            array_keys($list),
+            \array_keys($listFromCollection),
+            \array_keys($list),
         );
 
         Assert::same(
@@ -654,5 +856,17 @@ class UniqueObjectCollectionTest extends Unit
             'Two_item_collection' => [new ItemClassCollection([new ItemClass(1), new ItemClass(2)]), 2],
             'Empty_collection' => [new ItemClassCollection([]), 0],
         ];
+    }
+
+
+    private function createCollectionWithItems(int $numberOfItems): ItemClassCollection
+    {
+        $items = [];
+
+        for($i = 0; $i < $numberOfItems; $i++) {
+            $items[] = new ItemClass($i);
+        }
+
+        return new ItemClassCollection($items);
     }
 }
