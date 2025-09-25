@@ -121,6 +121,18 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
     }
 
 
+    public function sum(callable $callback): int|float
+    {
+        return \array_sum($this->map($callback));
+    }
+
+
+    public function reduce(callable $callback, mixed $initial = null): mixed
+    {
+        return \array_reduce($this->data, $callback, $initial);
+    }
+
+
     public function mapWithCustomKey(
         callable $keyCallback,
         callable $valueCallback,
@@ -168,7 +180,7 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
     }
 
 
-    public function min(callable $callback): mixed
+    public function minValue(callable $callback): mixed
     {
         return \min(
             $this->map($callback),
@@ -176,7 +188,7 @@ class UniqueObjectCollection implements \Countable, \IteratorAggregate, \JsonSer
     }
 
 
-    public function max(callable $callback): mixed
+    public function maxValue(callable $callback): mixed
     {
         return \max(
             $this->map($callback),
