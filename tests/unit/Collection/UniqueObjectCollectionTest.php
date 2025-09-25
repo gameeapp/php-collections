@@ -350,7 +350,7 @@ class UniqueObjectCollectionTest extends Unit
     }
 
 
-    public function testMin(): void
+    public function testMinValue(): void
     {
         $items = [
             new ItemClass(8),
@@ -360,7 +360,7 @@ class UniqueObjectCollectionTest extends Unit
 
         $collection = new ItemClassCollection($items);
 
-        $min = $collection->min(
+        $min = $collection->minValue(
             static fn (ItemClass $itemClass): int => $itemClass->getValue(),
         );
 
@@ -368,7 +368,7 @@ class UniqueObjectCollectionTest extends Unit
     }
 
 
-    public function testMax(): void
+    public function testMaxValue(): void
     {
         $items = [
             new ItemClass(8),
@@ -378,7 +378,7 @@ class UniqueObjectCollectionTest extends Unit
 
         $collection = new ItemClassCollection($items);
 
-        $max = $collection->max(
+        $max = $collection->maxValue(
             static fn (ItemClass $itemClass): int => $itemClass->getValue(),
         );
 
@@ -844,6 +844,66 @@ class UniqueObjectCollectionTest extends Unit
             \json_encode($collection, JSON_THROW_ON_ERROR),
             '[{"value":3},{"value":5},{"value":7}]',
         );
+    }
+
+
+    public function testSum(): void
+    {
+        $items = [
+            new ItemClass(1),
+            new ItemClass(5),
+            new ItemClass(30),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $sum = $collection->sum(
+            static fn (ItemClass $itemClass): int => $itemClass->getValue(),
+        );
+
+        Assert::same($sum, 36);
+    }
+
+
+    public function testReduce(): void
+    {
+        $items = [
+            new ItemClass(1),
+            new ItemClass(5),
+            new ItemClass(30),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $reduced = $collection->reduce(
+            static fn (int $carry, ItemClass $itemClass): int => $carry + $itemClass->getValue(),
+            0,
+        );
+
+        Assert::same($reduced, 36);
+
+        $empty = new ItemClassCollection([]);
+        $reducedEmpty = $empty->reduce(
+            static fn (int $carry, ItemClass $itemClass): int => $carry + $itemClass->getValue(),
+            10,
+        );
+
+        Assert::same($reducedEmpty, 10);
+
+        $items = [
+            new ItemClass(2),
+            new ItemClass(3),
+            new ItemClass(5),
+        ];
+
+        $collection = new ItemClassCollection($items);
+
+        $reduced = $collection->reduce(
+            static fn (int $carry, ItemClass $itemClass): int => $carry * $itemClass->getValue(),
+            1,
+        );
+
+        Assert::same($reduced, 30);
     }
 
 
